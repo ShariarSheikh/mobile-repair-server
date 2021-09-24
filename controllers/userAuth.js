@@ -25,8 +25,10 @@ exports.login = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email }).select("+password");
-
-    const isMatch = await user.matchPassword(password);
+    if (!user) {
+      return next(new ErrorResponse("Invalid credentials", 401));
+    }
+    const isMatch = await user.matchPasswords(password);
 
     if (!isMatch) {
       return next(new ErrorResponse("Invalid credentials", 401));
@@ -38,10 +40,10 @@ exports.login = async (req, res, next) => {
 };
 
 exports.userProfile = async (req, res, next) => {
-  res.status(200).json({ success: true, message: req.user });
+  res.status(200).json({ success: true, user: req.user });
 };
 
 const sendToken = async (user, statusCode, res) => {
   const token = await user.getSignedToken();
-  res.status(statusCode).json({ success: true, token });
+  res.status(statusCode).json({ success: true, token: token });
 };
