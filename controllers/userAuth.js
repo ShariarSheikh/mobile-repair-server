@@ -25,15 +25,17 @@ exports.login = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email }).select("+password");
+
     if (!user) {
       return next(new ErrorResponse("Invalid credentials", 401));
     }
     const isMatch = await user.matchPasswords(password);
-
+    
     if (!isMatch) {
       return next(new ErrorResponse("Invalid credentials", 401));
+    }else{
+      sendToken(user, 200, res);
     }
-    isMatch && sendToken(user, 200, res);
   } catch (error) {
     next(error);
   }
