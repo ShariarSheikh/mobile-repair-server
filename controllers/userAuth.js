@@ -4,12 +4,20 @@ const ErrorResponse = require("../utils/errorResponse");
 exports.register = async (req, res, next) => {
   const { name, email, password, profileImg } = req.body;
 
+  const isAdmin = false;
+
   if (!name || !email || !password) {
     return next(new ErrorResponse("Please provide email and password", 400));
   }
 
   try {
-    const user = await User.create({ name, email, password, profileImg });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      profileImg,
+      isAdmin,
+    });
     sendToken(user, 200, res);
   } catch (error) {
     next(error);
@@ -30,10 +38,10 @@ exports.login = async (req, res, next) => {
       return next(new ErrorResponse("Invalid credentials", 401));
     }
     const isMatch = await user.matchPasswords(password);
-    
+
     if (!isMatch) {
       return next(new ErrorResponse("Invalid credentials", 401));
-    }else{
+    } else {
       sendToken(user, 200, res);
     }
   } catch (error) {

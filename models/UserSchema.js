@@ -7,6 +7,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please Provide valid name"],
   },
+  isAdmin: {
+    type: Boolean,
+    required: [true],
+  },
   email: {
     type: String,
     required: [true, "Please Provide valid email"],
