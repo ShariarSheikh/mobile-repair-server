@@ -50,7 +50,17 @@ exports.login = async (req, res, next) => {
 };
 
 exports.userProfile = async (req, res, next) => {
-  res.status(200).json({ success: true, user: req.user });
+  if (req.user.isAdmin && req.user.email === process.env.ADMIN_EMAIL) {
+    res.status(200).json({
+      success: true,
+      user: { message: `Hello Admin ${req.user.name}`, data: req.user },
+    });
+  } else {
+    res.status(200).json({
+      success: true,
+      user: { message: `Welcome ${req.user.name}`, data: req.user },
+    });
+  }
 };
 
 const sendToken = async (user, statusCode, res) => {
