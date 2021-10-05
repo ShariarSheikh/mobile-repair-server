@@ -48,12 +48,12 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
-// "mobile.repair@gmail.com"
+
 exports.userProfile = async (req, res, next) => {
-  if (req.user.isAdmin === true && req.user.email === process.env.ADMIN_EMAIL) {
+  if (req.user.isAdmin && req.user.email === process.env.ADMIN_EMAIL) {
     res.status(200).json({
       success: true,
-      user: { message: `Hello Admin ${req.user.name}`, data: req.user },
+      user: { message: `Welcome Admin ${req.user.name}`, data: req.user },
     });
   } else {
     res.status(200).json({
