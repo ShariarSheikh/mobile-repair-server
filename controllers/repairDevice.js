@@ -14,16 +14,18 @@ exports.createDevice = async (req, res, next) => {
   const repairDevice = req.body;
 
   try {
-    const newDevice = await RepairDevice.create(repairDevice);
-    res.status(201).json({ success: true, newDevice });
+    await RepairDevice.create(repairDevice);
+    res
+      .status(201)
+      .json({ success: true, message: "Device created successfully" });
   } catch (error) {
-    next(error.message);
+    next(error);
   }
 };
 
 exports.updateDeviceData = async (req, res, next) => {
   const { id: _id } = req.params;
-  const devices = req.body;
+  const device = req.body;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -31,10 +33,12 @@ exports.updateDeviceData = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "Not found with this id" });
     } else {
-      const updateDevice = await RepairDevice.findByIdAndUpdate(_id, devices, {
+      await RepairDevice.findByIdAndUpdate(_id, device, {
         new: true,
       });
-      return res.status(200).json({ success: true, message: updateDevice });
+      return res
+        .status(200)
+        .json({ success: true, message: "Device updated successfully" });
     }
   } catch (error) {
     res.status(404).json({ success: false, message: error.message });
