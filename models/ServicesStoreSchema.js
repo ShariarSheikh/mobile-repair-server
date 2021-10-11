@@ -17,6 +17,10 @@ const ServicesStoreSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please Provide photo"],
   },
+  imagesFileName: {
+    type: String,
+    required: [true, "Please Provide images file name"],
+  },
 });
 
 const ServicesStore = mongoose.model("Services-Store", ServicesStoreSchema);
