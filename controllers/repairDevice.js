@@ -16,6 +16,7 @@ exports.createDevice = async (req, res, next) => {
     category: req.body.category,
     description: req.body.description,
     photo: `https://stormy-woodland-67379.herokuapp.com/images/repairDevices/${req.file.filename}`,
+    imagesFileName: req.file.filename,
   };
 
   try {

@@ -17,11 +17,16 @@ exports.createStores = async (req, res, next) => {
     lat: req.body.lat,
     long: req.body.lat,
     photo: `https://stormy-woodland-67379.herokuapp.com/images/servicesStore/${req.file.filename}`,
+    imagesFileName: req.file.filename,
   };
 
   try {
-    const data = await ServicesStore.create(newServicesStore);
-    res.status(201).json({ success: true, message: data });
+    if (!req.file.filename) {
+      res.status(404).json({ success: false, message: "image file not found" });
+    } else {
+      const data = await ServicesStore.create(newServicesStore);
+      res.status(201).json({ success: true, message: data });
+    }
   } catch (error) {
     next(error);
   }
@@ -29,7 +34,15 @@ exports.createStores = async (req, res, next) => {
 
 exports.updateStore = async (req, res, next) => {
   const { id: _id } = req.params;
-  const device = req.body;
+
+  const updateStore = {
+    locationName: req.body.locationName,
+    description: req.body.description,
+    lat: req.body.lat,
+    long: req.body.lat,
+    photo: `https://stormy-woodland-67379.herokuapp.com/images/servicesStore/1633963590017--IMG_20190104_215806124.jpg`,
+    imagesFileName: req.file.filename,
+  };
 
   try {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -37,7 +50,7 @@ exports.updateStore = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "Not found with this id" });
     } else {
-      await ServicesStore.findByIdAndUpdate(_id, device, {
+      await ServicesStore.findByIdAndUpdate(_id, updateStore, {
         new: true,
       });
       return res
