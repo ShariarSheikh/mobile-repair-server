@@ -7,8 +7,9 @@ const { connectDB } = require("./config/connectDB");
 connectDB();
 
 const app = express();
+app.use(express.static("public"));
 app.use(cors());
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: "50mb" }));
 
 const PORT = process.env.PORT || 9000;
 
@@ -20,6 +21,8 @@ app.get("/", (req, res) => {
 app.use("/auth/user", require("./router/userAuth"));
 //mobile repair devices api
 app.use("/api/mobile-repair-devices", require("./router/repairDevice"));
+//services store api
+app.use("/api/service-stores", require("./router/servicesStore"));
 
 app.listen(PORT, () => {
   console.log(`Port listening on ${PORT}`);
