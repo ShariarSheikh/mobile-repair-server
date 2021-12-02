@@ -10,6 +10,17 @@ exports.getStores = async (req, res, next) => {
   }
 };
 
+exports.getOne = async (req, res, next) => {
+  const { id: _id } = req.params;
+
+  try {
+    const store = await ServicesStore.findById(_id);
+    res.status(200).json({ success: true, store });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.createStores = async (req, res, next) => {
   const newServicesStore = {
     locationName: req.body.locationName,
