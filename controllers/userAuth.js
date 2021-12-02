@@ -65,5 +65,11 @@ exports.userProfile = async (req, res, next) => {
 
 const sendToken = async (user, statusCode, res) => {
   const token = await user.getSignedToken();
-  res.status(statusCode).json({ success: true, token: token });
+  res.status(statusCode).json({
+    success: true,
+    token: token,
+    email: user.email,
+    profileImg: user.profileImg,
+    name: user.name,
+  });
 };
